@@ -19,8 +19,6 @@ RUN yum -y install skylable-sx
 RUN git clone http://git.skylable.com/sxweb /var/www/sxweb
 
 copy nginx-sxweb.conf /etc/nginx/conf.d/
-copy sxcert.pem /etc/nginx/ssl/sxcert.pem
-copy sxkey.pem /etc/nginx/ssl/sxkey.pem
 copy nginx.conf /etc/nginx/
 copy php-fpm-www.conf /etc/php-fpm.d/www.conf
 copy config.inc.php /var/www/sxweb/public/

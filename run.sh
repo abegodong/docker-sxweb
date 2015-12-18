@@ -70,7 +70,23 @@ if [ -r "$SXWEB_CONFIG_DIR"/skylable.ini ]; then
     sed -i "s/^db.params.dbname = \".*\"$/db.params.dbname = \"$SXWEB_DB_ENV_MYSQL_DATABASE\"/" "$SXWEB_CONFIG_DIR"/skylable.ini
 fi
 
-echo Starting nginx...
-nginx
-echo Starting PHP-FPM...
-php-fpm 
+if [ -r "/data/sxweb/sxcert.pem" ] || [ -r "/data/sxweb/sxkey.pem" ]; then
+    chown root.root /data/sxweb/sxkey.pem; chmod 600 /data/sxweb/sxkey.pem
+    cp /data/sxweb/sxcert.pem /etc/nginx/ssl/sxcert.pem
+    cp /data/sxweb/sxkey.pem /etc/nginx/ssl/sxkey.pem
+else
+    echo WARNING: Could not find SSL certs in /data/sxweb/sxcert.pem /data/sxweb/sxkey.pem
+    echo Please use:
+    echo "docker run -v /data/sxweb:/data/sxweb -p 8443:443 --restart=always -d --name sxweb_frontend --link sxweb_db:sxweb_db skylable/sxweb"
+    echo .
+    echo Creating self signed certs... THIS IS UNSAFE
+    openssl req -new -newkey rsa:4096 -key /etc/nginx/ssl/sxkey.pem \
+        -out sxcert.csr \
+        -subj "/C=UK/ST=London/L=London/O=Dis/CN=localhost"
+    openssl req -new -newkey rsa:4096 -days 3650 -nodes -x509 \
+        -subj "/C=UK/ST=Lodnon/L=London/O=Dis/CN=localhost" \
+        -keyout /etc/nginx/ssl/sxkey.pem -out /etc/nginx/ssl/sxcert.pem
+fi
+
+echo Starting supervisord
+/usr/bin/supervisord -c /etc/supervisor/supervisord.conf
