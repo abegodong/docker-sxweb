@@ -80,12 +80,12 @@ else
     echo "docker run -v /data/sxweb:/data/sxweb -p 8443:443 --restart=always -d --name sxweb_frontend --link sxweb_db:sxweb_db skylable/sxweb"
     echo .
     echo Creating self signed certs... THIS IS UNSAFE
+    openssl req -new -newkey rsa:4096 -days 3650 -nodes -x509 \
+        -subj "/C=UK/ST=London/L=London/O=Dis/CN=localhost" \
+        -keyout /etc/nginx/ssl/sxkey.pem -out /etc/nginx/ssl/sxcert.pem
     openssl req -new -newkey rsa:4096 -key /etc/nginx/ssl/sxkey.pem \
         -out sxcert.csr \
         -subj "/C=UK/ST=London/L=London/O=Dis/CN=localhost"
-    openssl req -new -newkey rsa:4096 -days 3650 -nodes -x509 \
-        -subj "/C=UK/ST=Lodnon/L=London/O=Dis/CN=localhost" \
-        -keyout /etc/nginx/ssl/sxkey.pem -out /etc/nginx/ssl/sxcert.pem
 fi
 
 echo Starting supervisord
