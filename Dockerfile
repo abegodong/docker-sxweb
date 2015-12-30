@@ -30,6 +30,7 @@ RUN find /var/www/sxweb -type d -exec chmod 755 {} \; && \
     find /var/www/sxweb -type f -exec chmod 644 {} \; && \
     chown -R root:root /var/www/sxweb && \
     mkdir -p /var/www/sxweb/data && \
+    mkdir -p /var/www/sxweb/data/logs && \
     find /var/www/sxweb/data -type d -exec chmod 700 {} \; && \
     chown -R nginx /var/www/sxweb/data && \
     chmod 750 /var/www/sxweb/application/configs/ && \ 
