@@ -9,7 +9,7 @@ RUN yum clean all && \
         php-ZendFramework php-ZendFramework-Db-Adapter-Pdo-Mysql \
         php-guzzlehttp-streams.noarch php-guzzle-Guzzle.noarch php-Monolog.noarch nginx \
         php-gd php-mysql php-pdo php-xml php-mbstring php-process \
-	wget sudo bwm-ng git pwgen mariadb telnet && \
+	wget sudo bwm-ng git pwgen mariadb telnet supervisor && \
     yum clean all;
 
 copy skylable.repo /etc/yum.repos.d/
@@ -23,6 +23,7 @@ copy nginx.conf /etc/nginx/
 copy php-fpm-www.conf /etc/php-fpm.d/www.conf
 copy config.inc.php /var/www/sxweb/public/
 copy run.sh /
+copy supervisord.conf /etc/supervisor/supervisord.conf
 
 # Modify permissions 
 RUN find /var/www/sxweb -type d -exec chmod 755 {} \; && \

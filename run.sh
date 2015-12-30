@@ -2,6 +2,10 @@
 
 SXWEB_CONFIG_DIR="/var/www/sxweb/application/configs/"
 
+if [ -f "/data/sxweb/skylable.ini" ]; then
+    cp -f /data/sxweb/skylable.ini "$SXWEB_CONFIG_DIR"/skylable.ini
+    rm -f /var/www/sxweb/public/install.php
+fi
 
 if [ -n "$SXWEB_DB_PORT_3306_TCP_ADDR" ] && [ ! -f "$SXWEB_CONFIG_DIR"/skylable.ini ]; then
 	echo Setting db parameters in SXWeb installer...
@@ -70,6 +74,9 @@ if [ -r "$SXWEB_CONFIG_DIR"/skylable.ini ]; then
     sed -i "s/^db.params.dbname = \".*\"$/db.params.dbname = \"$SXWEB_DB_ENV_MYSQL_DATABASE\"/" "$SXWEB_CONFIG_DIR"/skylable.ini
 fi
 
+mkdir -p /etc/nginx/ssl
+mkdir -p /srv/logs/supervisor
+
 if [ -r "/data/sxweb/sxcert.pem" ] || [ -r "/data/sxweb/sxkey.pem" ]; then
     chown root.root /data/sxweb/sxkey.pem; chmod 600 /data/sxweb/sxkey.pem
     cp /data/sxweb/sxcert.pem /etc/nginx/ssl/sxcert.pem
@@ -87,6 +94,7 @@ else
         -out sxcert.csr \
         -subj "/C=UK/ST=London/L=London/O=Dis/CN=localhost"
 fi
+
 
 echo Starting supervisord
 /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
