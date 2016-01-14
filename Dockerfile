@@ -12,11 +12,20 @@ RUN yum clean all && \
 	wget sudo bwm-ng git pwgen mariadb telnet supervisor && \
     yum clean all;
 
-copy skylable.repo /etc/yum.repos.d/
+#copy skylable.repo /etc/yum.repos.d/
+#RUN yum -y install skylable-sx
 
-RUN yum -y install skylable-sx
+RUN yum -y install gcc git make openssl-devel yajl-devel nss-devel && \
+    yum clean all
+RUN git clone http://git.skylable.com/sx /opt/sx && \
+    cd /opt/sx && \
+    git checkout 6283697fc5b35c4b9065b4dbf5008a5eb8d75d99 && \
+    ./configure --with-nss --without-ssl && \
+    make -j8 install
+
 #RUN git clone -b 0.9.0 http://git.skylable.com/sxweb /var/www/sxweb
-RUN git clone http://git.skylable.com/sxweb /var/www/sxweb
+RUN git clone http://git.skylable.com/sxweb /var/www/sxweb && \
+    cd /var/www/sxweb && git checkout  sxauthd
 
 copy nginx-sxweb.conf /etc/nginx/conf.d/
 copy nginx.conf /etc/nginx/
