@@ -97,4 +97,4 @@ fi
 
 
 echo Starting supervisord
-/usr/bin/supervisord -c /etc/supervisor/supervisord.conf
+/usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
