@@ -6,7 +6,7 @@ A ready to use SXWeb Docker container.
 
 TL;DR
 
-   docker run --restart=always -d --name sxweb_db -e MYSQL_ROOT_PASSWORD=testme -e MYSQL_DATABASE=sxweb -e MYSQL_USER=sxweb -e MYSQL_PASSWORD=mypass mysql/mysql-server:5.5
+   docker run --restart=always -d --name sxweb_db -v /data/sxweb/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=testme -e MYSQL_DATABASE=sxweb -e MYSQL_USER=sxweb -e MYSQL_PASSWORD=mypass mysql/mysql-server:5.5
 
 Then start a SXWeb container linked to this MySQL container:
 
